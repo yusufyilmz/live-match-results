@@ -7,7 +7,7 @@ const usePlayerData = (): [string[], string, () => void, (d: string) => void, (d
 
     const updatePlayerData = (currentPlayerData: string) => {
         if(!currentPlayerData){
-            return setError("Enter a player")
+            return setError("Enter a player name")
         }
 
         if(playerPlayerData.indexOf(currentPlayerData) !== -1){
