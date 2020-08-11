@@ -27,6 +27,7 @@ const useShowMore = (items: Array<unknown>) => {
     const ShowMoreButton = () => {
         return showMore && (
             <Button
+                style={{ width: '100%'}}
                 key="button"
                 variant="info"
                 onClick={() => setLastCount(i  => i + 5)}>
