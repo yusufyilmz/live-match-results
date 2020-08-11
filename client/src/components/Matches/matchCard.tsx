@@ -23,7 +23,7 @@ const MatchCard = ({ createdAt, players }: MatchCardProps): JSX.Element => {
             <PlayerCard 
             matchCount={player.matchCount}
             name={player.name} 
-            rating={player.rating} />),
+            rating={Math.round(player.rating)} />),
         [players],
     )
 

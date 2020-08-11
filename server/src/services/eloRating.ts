@@ -1,5 +1,5 @@
 export interface EloRating {
-  calculateRatings: (users: any []) => any [];
+  calculateRatings: (users: any) => any;
 }
 
 class EloRatingService {
@@ -9,34 +9,33 @@ class EloRatingService {
   constructor(K: number) {
     this.K = K;
   }
-  probability(rating: number): number {
-    return Math.pow(10.0, (rating / 400));
+  probability(winnerRating: number, loserRating: number): number {
+    return 1.0 * 1.0 / (1 + 1.0 * (Math.pow(10, 1.0 * (winnerRating - loserRating) / 400)));
   }
 
-  calculateRatings = (users: any []): any [] => {
+  calculateRatings = (users: any[]): any[] => {
 
-    let Q:number = 0.0;
+    const [winner, ...losers] = users;
 
-    users.forEach((user: any, i: number) => {
-      Q += this.probability(user.rating);
+    let winnerRatingDifference = 0 ;
+
+    const updatedLosers =  losers.map((loser: any, i: number) => {
+
+      const winnerProbabilirt = this.probability(winner.rating, loser.rating);
+      const loserProbability = this.probability(loser.rating, winner.rating);
+      const winnerRating = winner.rating + this.K * (1 - winnerProbabilirt);
+      const loserRating = loser.rating + this.K * (0 - loserProbability);
+      winnerRatingDifference += (winnerRating - winner.rating);
+
+      loser.rating = loserRating;
+
+      return loser;
     });
 
-    return users.map((user: any, i: number) => {
+    winner.rating += winnerRatingDifference;
 
-      const expected = this.probability(user.rating) / Q;
+    return [winner, ...updatedLosers];
 
-      let actualScore = 0;
-      if (i === 0) {
-        actualScore = 1;
-      } else {
-        actualScore = 0;
-      }
-
-      const newRating = Math.round(user.rating + this.K * (actualScore - expected));
-      user.rating = newRating;
-
-      return user;
-    });
   }
 }
 

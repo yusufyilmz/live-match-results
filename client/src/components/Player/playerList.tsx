@@ -34,7 +34,7 @@ const PlayerList = (
                 key={child._id}>
                 <PlayerCard
                     matchCount={child.matchCount}
-                    rating={child.rating}
+                    rating={Math.round(child.rating)}
                     name={child.name}
                 />
             </StyledListGroupITem>
