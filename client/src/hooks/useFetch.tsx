@@ -6,7 +6,7 @@ import {
   fetchDataError,
   addDataSuccess,
 } from "../context/actions";
-import { useHistory } from "react-router-dom";
+import useCustomHistory from "./useCustomHistory";
 
 type OnDemandFetch = (
   url: string,
@@ -19,9 +19,9 @@ export enum FetchType {
   get,
   add
 }
-const useFetch = (navigate: string): [OnDemandFetch] => {
+const useFetch = (navigatePath: string): [OnDemandFetch] => {
 
-  const history = useHistory();
+  const [ navigate] = useCustomHistory(navigatePath);
 
   const { dispatch } = useContext(MatchDataDispatchContext);
   const onDemandFetch = useCallback(
@@ -38,10 +38,10 @@ const useFetch = (navigate: string): [OnDemandFetch] => {
           } else {
             if (type === FetchType.add) {
               dispatch(addDataSuccess(json));
-              history.push(navigate)
+              navigate();
             } else if (type === FetchType.getAll) {
               dispatch(fetchDataSuccess(json));
-              history.push(navigate)
+              navigate();
             }
           }
         } catch (e) {
